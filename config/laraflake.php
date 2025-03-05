@@ -12,8 +12,25 @@ return [
     |
     | The class to use by Laraflake when generating unique identifiers.
     | The default is the Snowflake class, but you can also use the Sonyflake class.
+    | You can also provide your own custom implementation class name here,
+    | as long as it implements the SnowflakeGeneratorInterface.
     */
     'snowflake_type' => Snowflake::class,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Generator Factory
+    |--------------------------------------------------------------------------
+    |
+    | If you're using a custom generator (not Snowflake or Sonyflake), you can
+    | specify a factory class or closure that will be used to instantiate your
+    | generator. This factory must return an object that implements the
+    | SnowflakeGeneratorInterface.
+    |
+    | This can be a class name that implements the factory pattern or a closure.
+    | Leave as null to use the default factory logic based on snowflake_type.
+    */
+    'generator_factory' => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -49,4 +66,15 @@ return [
     |
     */
     'machine_id' => env('LARAFLAKE_MACHINE_ID', 0),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Generator Options
+    |--------------------------------------------------------------------------
+    |
+    | Additional options that will be passed to your custom generator factory.
+    | This allows you to provide configuration specific to your implementation
+    | without modifying the core Laraflake package.
+    */
+    'custom_options' => [],
 ];

@@ -238,6 +238,46 @@ class AppServiceProvider extends ServiceProvider
 
 Please see [godruoyi/php-snowflake](https://github.com/godruoyi/php-snowflake) for more information on the available sequence resolvers and their dependencies.
 
+### Custom Generators
+
+You can implement your own custom Snowflake generator by implementing the `SnowflakeGeneratorInterface`. This gives you complete control over the ID generation process.
+
+There are three ways to use your custom implementation:
+
+#### 1. Direct Implementation
+
+Create a class that implements `SnowflakeGeneratorInterface` and specify it in your config:
+
+```php
+// config/laraflake.php
+'snowflake_type' => \App\Snowflake\CustomGenerator::class,
+```
+
+#### 2. Factory Class
+
+For more complex implementations, implement the `SnowflakeGeneratorFactoryInterface`:
+
+```php
+// config/laraflake.php
+'generator_factory' => \App\Snowflake\CustomGeneratorFactory::class,
+'custom_options' => [
+    'node_id' => env('CUSTOM_NODE_ID', 1),
+],
+```
+
+#### 3. Closure Factory
+
+For simpler cases, register a closure in a service provider:
+
+```php
+// In a service provider
+config()->set('laraflake.generator_factory', function ($config) {
+    return new CustomGenerator($config['custom_options']['node_id'] ?? 1);
+});
+```
+
+For complete documentation and examples, see [Creating Custom Generators](docs/CustomImplementation.md).
+
 ## Contributing
 
 Thank you for considering contributing! You can read the contribution guide [here](CONTRIBUTING.md).
